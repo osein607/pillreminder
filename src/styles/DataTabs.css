@@ -1,0 +1,38 @@
+.date-tabs {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  overflow-x: auto;
+  padding: 0 24px 8px;
+}
+
+.pill {
+  width: 56px;
+  height: 80px;
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  text-align: center;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: 0.2s ease;
+}
+
+.pill.active {
+  background: linear-gradient(to bottom, #fb7185, #f43f5e);
+  color: white;
+  transform: scale(1.002);
+  outline: none;
+}
+
+.pill-day {
+  font-size: 18px;
+}
+
+.pill-week {
+  font-size: 12px;
+  opacity: 0.9;
+}

@@ -1,0 +1,127 @@
+/* 전체 페이지 */
+
+/* 제목 */
+.home-container h1 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.home-container {
+  width: 100%;
+  height: 100%;
+  padding-bottom: 100px;
+  margin-bottom: 24px;
+  background: linear-gradient(to bottom, #f0f9ff, #ffffff);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.home-subtitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0284c7;
+  margin: 8px 24px;
+}
+
+/* 약 리스트 컨테이너 */
+.medicine-list {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 24px;
+}
+
+/* 약 카드 */
+.medicine-card {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 24px;
+  box-shadow: 0 10px 25px rgba(16, 24, 40, 0.1);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.medicine-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.15);
+}
+
+/* 카드 내부 정보 */
+.medicine-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.medicine-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1e293b;
+}
+
+.medicine-dosage {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.medicine-time {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #2563eb;
+  background: #eff6ff;
+  border-radius: 9999px;
+  padding: 3px 8px;
+  border: 1px solid #bfdbfe;
+}
+
+/* 복용 버튼 */
+.take-btn {
+  border: none;
+  border-radius: 9999px;
+  padding: 8px 14px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.take-btn:hover {
+  background: #e2e8f0;
+}
+
+.take-btn.taken {
+  background: #10b981;
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(16, 185, 129, 0.4);
+}
+
+/* 플로팅 버튼 */
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #10b981;
+  color: white;
+  font-size: 28px;
+  display: grid;
+  place-items: center;
+  border: none;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  cursor: pointer;
+}

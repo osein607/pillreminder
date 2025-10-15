@@ -1,0 +1,106 @@
+.add-page {
+  padding: 24px;
+  background: linear-gradient(to bottom, #f0f9ff, #ffffff);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.add-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 15px;
+}
+
+.add-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 30px;
+  color: #64748b;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+}
+
+.add-section {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(16, 24, 40, 0.1);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  backdrop-filter: blur(10px);
+}
+
+.add-section label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0284c7;
+}
+
+.input-box {
+  border: 1px solid rgba(191, 219, 254, 0.7);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 15px;
+  color: #1e293b;
+  background-color: #f8fafc;
+  outline: none;
+  transition: 0.2s;
+}
+
+.input-box:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.pill-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.pill-option {
+  flex: 1;
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.pill-option.active {
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.4);
+}
+
+.submit-btn {
+  margin-top: 20px;
+  background: #0284c7;
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  border: none;
+  border-radius: 9999px;
+  padding: 12px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3);
+  transition: all 0.2s ease;
+}
+
+.submit-btn:hover {
+  background: #0369a1;
+  box-shadow: 0 10px 25px rgba(2, 132, 199, 0.35);
+}

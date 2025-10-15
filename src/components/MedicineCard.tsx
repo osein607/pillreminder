@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Medicine } from '../types/medicine';
+import type { Medicine } from '../data/medicine';
 
 type Props = {
   medicine: Medicine;

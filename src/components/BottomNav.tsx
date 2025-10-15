@@ -7,17 +7,17 @@ const BottomNav: React.FC = () => {
     <nav className="bottom-nav glass">
       <NavLink to="/" end className="nav-item">
         <span className="icon">🏠</span>
-        <span className="label">Home</span>
+        <span className="label">홈</span>
       </NavLink>
 
       <NavLink to="/graph" className="nav-item">
         <span className="icon">📊</span>
-        <span className="label">Graph</span>
+        <span className="label">현황</span>
       </NavLink>
 
       <NavLink to="/settings" className="nav-item">
         <span className="icon">⚙️</span>
-        <span className="label">Settings</span>
+        <span className="label">세팅</span>
       </NavLink>
     </nav>
   );

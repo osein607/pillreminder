@@ -4,6 +4,8 @@ import Home from './pages/Home';
 import Graph from './pages/Graph';
 import Settings from './pages/Settings';
 import BottomNav from './components/BottomNav';
+import AddMedicinePage from './pages/AddMedicinePage';
+
 import './styles/AppView.css';
 
 const App: React.FC = () => {
@@ -14,6 +16,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/graph" element={<Graph />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/add" element={<AddMedicinePage />} />
         </Routes>
         <BottomNav />
       </div>

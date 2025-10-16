@@ -23,7 +23,7 @@
 .home-subtitle {
   font-size: 16px;
   font-weight: 700;
-  color: #0284c7;
+  color: #3B82F6;
   margin: 8px 24px;
 }
 
@@ -124,4 +124,39 @@
   border: none;
   box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
   cursor: pointer;
+}
+
+/* 약 리스트 영역 */
+.medicine-list {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 20px;
+}
+
+/* 약이 없을 때 보여줄 박스 */
+.empty-box {
+  background-color: #f9fafb;
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  padding: 40px 20px;
+  text-align: center;
+  color: #64748b;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.empty-box .emoji {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.empty-box .guide {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-top: 6px;
 }

@@ -5,8 +5,11 @@ import '../styles/Header.css';
 const Header: React.FC = () => {
   const navigate = useNavigate();
 
+  const formatDate = (date: Date) => date.toISOString().split("T")[0];
+  const today = formatDate(new Date());
+
   const handleAddClick = () => {
-    navigate('/add');
+    navigate(`/add/${today}`);
   };
 
   return (

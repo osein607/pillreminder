@@ -1,38 +1,55 @@
 import { create } from "zustand";
-
-type Medicine = {
-  id: number;
-  name: string;
-  dosage: string;
-  instruction: string;  
-  remaining: number;
-  taken: boolean;
-  date: string;
-};
+import { persist } from "zustand/middleware";
+import type { Medicine } from "./medicine";
 
 interface MedicineStore {
   medicines: Record<string, Medicine[]>;
-  addMedicine: (date: string, newMed: Omit<Medicine, "id" | "remaining" | "taken" | "date">) => void;
+  addMedicine: (
+    date: string,
+    newMed: Omit<Medicine, "id" | "remaining" | "taken" | "date">
+  ) => void;
+
+  toggleTaken: (date: string, id: number) => void; // ✅ 추가
 }
 
-export const useMedicineStore = create<MedicineStore>((set) => ({
-  medicines: {},
-  addMedicine: (date, newMed) =>
-    set((state) => {
-      const prev = state.medicines[date] || [];
-      const id = Date.now(); // 간단한 id 생성
-      const newMedicine: Medicine = {
-        id,
-        ...newMed,
-        remaining: 7,
-        taken: false,
-        date,
-      };
-      return {
-        medicines: {
-          ...state.medicines,
-          [date]: [...prev, newMedicine],
-        },
-      };
+export const useMedicineStore = create<MedicineStore>()(
+  persist(
+    (set) => ({
+      medicines: {},
+
+      addMedicine: (date, newMed) =>
+        set((state) => {
+          const prev = state.medicines[date] || [];
+          const id = Date.now();
+          const newMedicine: Medicine = {
+            id,
+            ...newMed,
+            remaining: newMed.quantity,
+            taken: false,
+            date,
+          };
+          return {
+            medicines: {
+              ...state.medicines,
+              [date]: [...prev, newMedicine],
+            },
+          };
+        }),
+
+      // ✅ 복용 상태 토글 함수
+      toggleTaken: (date, id) =>
+        set((state) => {
+          const updated = (state.medicines[date] || []).map((m) =>
+            m.id === id ? { ...m, taken: !m.taken } : m
+          );
+          return {
+            medicines: {
+              ...state.medicines,
+              [date]: updated,
+            },
+          };
+        }),
     }),
-}));
+    { name: "medicine-storage" }
+  )
+);

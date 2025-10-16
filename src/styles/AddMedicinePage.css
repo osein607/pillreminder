@@ -1,106 +1,172 @@
+/* ===============================
+   📌 기본 레이아웃
+================================*/
 .add-page {
-  padding: 24px;
-  background: linear-gradient(to bottom, #f0f9ff, #ffffff);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  height: 100%;
+  padding: 24px 20px 100px;
+  background: linear-gradient(to bottom, #f0f9ff, #ffffff);
 }
 
+/* ===============================
+   📌 헤더
+================================*/
 .add-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin: 8px 15px;
+  margin-bottom: 24px;
+}
+
+.add-header .back-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: -10px;
 }
 
 .add-title {
+  flex: 1;
+  text-align: right;
   font-size: 20px;
-  font-weight: 800;
-  color: #1f2937;
+  font-weight: 700;
+  color: #3B82F6;
+  margin-right: 20px;
 }
 
-.back-btn {
-  background: none;
-  border: none;
-  font-size: 30px;
-  color: #64748b;
-  cursor: pointer;
-  position: absolute;
-  right: 10px;
-}
-
+/* ===============================
+   📌 섹션 공통
+================================*/
 .add-section {
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(16, 24, 40, 0.1);
-  padding: 16px 18px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  backdrop-filter: blur(10px);
+  margin-bottom: 20px;
 }
 
 .add-section label {
-  font-size: 14px;
-  font-weight: 700;
-  color: #0284c7;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #374151;
 }
 
 .input-box {
-  border: 1px solid rgba(191, 219, 254, 0.7);
-  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
   padding: 10px 12px;
   font-size: 15px;
-  color: #1e293b;
-  background-color: #f8fafc;
   outline: none;
-  transition: 0.2s;
+  transition: border 0.2s ease-in-out;
 }
 
 .input-box:focus {
-  border-color: #0284c7;
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+  border-color: #3B82F6;
 }
 
+/* ===============================
+   📌 약 종류, 복용 시간 버튼 그룹
+================================*/
 .pill-buttons {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .pill-option {
   flex: 1;
-  background: #eff6ff;
-  color: #2563eb;
-  border: 1px solid #bfdbfe;
-  border-radius: 12px;
-  padding: 8px 0;
-  font-size: 13px;
-  font-weight: 600;
+  min-width: 100px;
+  padding: 10px 14px;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 20px;
+  font-size: 14px;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: all 0.2s ease-in-out;
+  color: black;
 }
 
 .pill-option.active {
-  background: #2563eb;
+  background-color: #3B82F6;
   color: white;
-  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.4);
+  border-color: #3B82F6;
 }
 
-.submit-btn {
-  margin-top: 20px;
-  background: #0284c7;
-  color: white;
-  font-weight: 700;
-  font-size: 15px;
+/* ===============================
+   📌 수량 조절
+================================*/
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 8px;
   border: none;
-  border-radius: 9999px;
-  padding: 12px;
+  background-color: #3B82F6;
+  color: white;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3);
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease-in-out;
+  padding-top: 0.1px;
+}
+
+.qty-btn:hover {
+  background-color: #0369a1;
+}
+
+.qty-display {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* ===============================
+   📌 복용 기간 (캘린더)
+================================*/
+.calendar-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calendar-input {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+/* ===============================
+   📌 등록 버튼
+================================*/
+.submit-btn {
+  background-color: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 0;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .submit-btn:hover {
-  background: #0369a1;
-  box-shadow: 0 10px 25px rgba(2, 132, 199, 0.35);
+  background-color: #0369a1;
+}
+
+/* ===============================
+   📌 스크롤바(모바일 대비)
+================================*/
+.add-page::-webkit-scrollbar {
+  width: 6px;
+}
+.add-page::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
 }

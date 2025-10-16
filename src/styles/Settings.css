@@ -1,0 +1,90 @@
+.settings-page {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f0f9ff, #ffffff);
+  padding: 24px;
+  box-sizing: border-box;
+  font-family: "Pretendard", sans-serif;
+}
+
+.settings-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.settings-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0284c7;
+  margin-bottom: 4px;
+}
+
+.settings-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.settings-section {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #e0f2fe;
+  padding-bottom: 6px;
+}
+
+.info-card {
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: #374151;
+}
+
+.toggle-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #0284c7;
+  cursor: pointer;
+}
+
+.danger-zone {
+  border: 1px solid #fee2e2;
+  background-color: #fff1f2;
+}
+
+.reset-btn {
+  width: 100%;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-btn:hover {
+  background-color: #dc2626;
+  transform: translateY(-2px);
+}

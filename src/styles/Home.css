@@ -17,7 +17,6 @@
   background: linear-gradient(to bottom, #f0f9ff, #ffffff);
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
 }
 
 .home-subtitle {

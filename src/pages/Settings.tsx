@@ -1,25 +1,25 @@
 import React, { useState } from "react";
 import "../styles/Settings.css";
-import { useMedicineStore } from "../data/medicineStore";
-import { useNavigate } from "react-router-dom";
+// import { useMedicineStore } from "../data/medicineStore";
+// import { useNavigate } from "react-router-dom";
 
 const Settings: React.FC = () => {
-  const navigate = useNavigate();
-  const resetStore = useMedicineStore((state) => state.reset);
+  // const navigate = useNavigate();
+  // const resetStore = useMedicineStore((state) => state.reset);
 
   // 보호자 정보 입력값
   const [guardianName, setGuardianName] = useState("");
   const [guardianPhone, setGuardianPhone] = useState("");
   const [guardianEmail, setGuardianEmail] = useState("");
 
-  const handleReset = () => {
-    if (window.confirm("정말 모든 복약 데이터를 초기화할까요?")) {
-      resetStore();
-      localStorage.removeItem("medicine-storage");
-      alert("데이터가 초기화되었습니다!");
-      navigate("/");
-    }
-  };
+  // const handleReset = () => {
+  //   if (window.confirm("정말 모든 복약 데이터를 초기화할까요?")) {
+  //     resetStore();
+  //     localStorage.removeItem("medicine-storage");
+  //     alert("데이터가 초기화되었습니다!");
+  //     navigate("/");
+  //   }
+  // };
 
   const handleSaveGuardian = () => {
     if (!guardianName || !guardianPhone) {

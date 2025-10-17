@@ -11,7 +11,7 @@ export default function AddMedicinePage() {
   const { id } = useParams<{ id?: string }>();
   const navigate = useNavigate();
 
-  const { medicines, addMedicine, updateMedicine, deleteMedicine } = useMedicineStore(); 
+  const { medicines, addMedicine, deleteMedicine } = useMedicineStore(); 
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {

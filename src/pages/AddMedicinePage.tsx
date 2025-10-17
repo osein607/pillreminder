@@ -11,15 +11,11 @@ export default function AddMedicinePage() {
   const { id } = useParams<{ id?: string }>();
   const navigate = useNavigate();
 
-  const { medicines, addMedicine, updateMedicine } = useMedicineStore();
-  const [hydrated, setHydrated] = useState(false); // ✅ persist 복원 여부 확인
+  const { medicines, addMedicine, updateMedicine, deleteMedicine } = useMedicineStore(); 
+  const [hydrated, setHydrated] = useState(false);
 
-  // ✅ Zustand persist 복원 완료 감지
   useEffect(() => {
-    const unsub = useMedicineStore.persist.onFinishHydration(() => {
-      setHydrated(true);
-    });
-    // 이미 복원된 경우 대비
+    const unsub = useMedicineStore.persist.onFinishHydration(() => setHydrated(true));
     if (useMedicineStore.persist.hasHydrated()) setHydrated(true);
     return () => unsub();
   }, []);
@@ -35,9 +31,13 @@ export default function AddMedicinePage() {
     }
   }, [hydrated, medicines, id]);
 
-  // ✅ 기본값들
-  const formatDate = (date: Date) => date.toISOString().split("T")[0];
-  const today = formatDate(new Date());
+  const formatLocalDate = (date: Date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  };
+  const today = formatLocalDate(new Date());
 
   const [type, setType] = useState<Medicine["type"] | null>(null);
   const [name, setName] = useState("");
@@ -47,7 +47,6 @@ export default function AddMedicinePage() {
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
 
-  // ✅ existing이 로드되면 form 값 채우기
   useEffect(() => {
     if (existing) {
       setType(existing.type);
@@ -60,60 +59,83 @@ export default function AddMedicinePage() {
     }
   }, [existing]);
 
-  const handleSubmit = () => {
-    if (!type) return alert("약 종류를 선택해주세요.");
-    if (!instruction) return alert("복용 시간을 선택해주세요.");
-
-    if (isEditMode && existing) {
-      updateMedicine(existing.date, existing.id, {
-        type,
-        name,
-        dosage: `${quantity}개`,
-        time: instruction,
-        quantity,
-        startDate,
-        endDate,
-        notification,
-      });
-      alert("수정이 완료되었습니다!");
-      navigate("/");
-    } else {
-      const getDateList = (start: string, end: string) => {
-        const result: string[] = [];
-        let cur = new Date(start);
-        const endObj = new Date(end);
-        while (cur <= endObj) {
-          result.push(cur.toISOString().split("T")[0]);
-          cur.setDate(cur.getDate() + 1);
-        }
-        return result;
-      };
-
-      const dates = getDateList(startDate, endDate);
-      dates.forEach((d) => {
-        addMedicine(d, {
-          type,
-          name,
-          dosage: `${quantity}개`,
-          time: instruction!,
-          quantity,
-          startDate,
-          endDate,
-          notification,
-        });
-      });
-      alert(`${name} 이/(가) 등록되었습니다!`);
-      navigate("/");
+  // ✅ 약 삭제 함수
+  const handleDelete = () => {
+    if (!existing) return;
+    if (window.confirm(`"${existing.name}" 약 정보를 삭제할까요?`)) {
+      deleteMedicine(existing.id);
+      alert("약 정보가 삭제되었습니다.");
+      navigate("/"); // 홈으로 이동
     }
   };
 
-  // ✅ 복원이 끝나기 전에는 로딩 표시
+  const handleSubmit = () => {
+    if (!type) return alert("약 종류를 선택해주세요.");
+    if (!name.trim()) return alert("약 이름을 입력해주세요.");
+    if (!instruction) return alert("복용 시간을 선택해주세요.");
+    if (new Date(startDate) > new Date(endDate))
+      return alert("복용 시작일은 종료일보다 늦을 수 없습니다.");
+
+    const getDateList = (start: string, end: string) => {
+      const result: string[] = [];
+      const parseLocalDate = (dateStr: string) => {
+        const [y, m, d] = dateStr.split("-").map(Number);
+        return new Date(y, m - 1, d);
+      };
+      let cur = parseLocalDate(start);
+      const endObj = parseLocalDate(end);
+      while (cur <= endObj) {
+        result.push(formatLocalDate(cur));
+        cur.setDate(cur.getDate() + 1);
+      }
+      return result;
+    };
+
+    const newMedicineData = {
+      type,
+      name,
+      dosage: `${quantity}개`,
+      time: instruction!,
+      quantity,
+      startDate,
+      endDate,
+      notification,
+    };
+
+    if (isEditMode && existing) {
+      const oldDates = getDateList(existing.startDate, existing.endDate);
+      const newDates = getDateList(startDate, endDate);
+
+      useMedicineStore.setState((state) => {
+        const updated = { ...state.medicines };
+        oldDates.forEach((d) => {
+          const dayList = updated[d] || [];
+          updated[d] = dayList.filter((m) => m.id !== existing.id);
+        });
+        return { medicines: updated };
+      });
+
+      newDates.forEach((d) => {
+        addMedicine(d, {
+          id: existing.id,
+          ...newMedicineData,
+        } as any);
+      });
+
+      alert("수정이 완료되었습니다!");
+      navigate("/", { replace: true });
+    } else {
+      const newDates = getDateList(startDate, endDate);
+      newDates.forEach((d) => addMedicine(d, newMedicineData));
+      alert(`${name} 이/(가) 등록되었습니다!`);
+      navigate("/", { replace: true });
+    }
+  };
+
   if (!hydrated) {
     return (
       <div className="add-page">
-        <h3 style={{ textAlign: "center", marginTop: "50px" }}>
-          ⏳ 데이터 불러오는 중...
-        </h3>
+        <h3 style={{ textAlign: "center", marginTop: "50px" }}>⏳ 데이터 불러오는 중...</h3>
       </div>
     );
   }
@@ -124,9 +146,7 @@ export default function AddMedicinePage() {
         <button className="back-btn" onClick={() => navigate(-1)}>
           🏠
         </button>
-        <h2 className="add-title">
-          {isEditMode ? "복약 정보 수정" : "복약 등록"}
-        </h2>
+        <h2 className="add-title">{isEditMode ? "복약 정보 수정" : "복약 등록"}</h2>
       </header>
 
       {/* 약 종류 */}
@@ -150,7 +170,7 @@ export default function AddMedicinePage() {
         <label>약 이름</label>
         <input
           className="input-box"
-          placeholder="예: Paracetamol XL2"
+          placeholder="예: 감기약"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -160,10 +180,7 @@ export default function AddMedicinePage() {
       <section className="add-section">
         <label>수량</label>
         <div className="quantity-control">
-          <button
-            onClick={() => setQuantity((p) => Math.max(1, p - 1))}
-            className="qty-btn"
-          >
+          <button onClick={() => setQuantity((p) => Math.max(1, p - 1))} className="qty-btn">
             -
           </button>
           <span className="qty-display">{quantity}</span>
@@ -223,6 +240,12 @@ export default function AddMedicinePage() {
       <button className="submit-btn" onClick={handleSubmit}>
         {isEditMode ? "수정 완료" : "등록 완료"}
       </button>
+
+      {isEditMode && (
+        <button className="delete-btn" onClick={handleDelete}>
+          🗑️ 약 삭제하기
+        </button>
+      )}
     </div>
   );
 }

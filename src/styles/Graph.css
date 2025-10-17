@@ -1,72 +1,113 @@
 .graph-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 32px 20px 100px;
-  background: linear-gradient(to bottom, #f0f9ff, #ffffff);
+  padding: 24px;
+  background: #f9fcff;
+  border-radius: 16px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
 }
 
 .graph-title {
   font-size: 20px;
   font-weight: 700;
-  color: #0284c7;
-  margin-bottom: 24px;
+  color: #1f2937;
+  margin-bottom: 16px;
 }
 
-.graph-card {
-  background-color: #fff;
-  border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  padding: 30px 40px;
+/* 🗓️ 달력 스타일 */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 20px;
+  background: #fff;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.calendar-cell {
+  background: #f0f9ff;
+  border-radius: 10px;
+  padding: 4px 0;
+  height: 48px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 16px;
+}
+
+.calendar-day {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.calendar-symbol {
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+.calendar-symbol.taken {
+  color: #22c55e; /* 초록색: 완료 */
+}
+
+.calendar-symbol.partial {
+  color: #facc15; /* 노랑색: 부분 */
+}
+
+.calendar-symbol.missed {
+  color: #ef4444; /* 빨강: 미복용 */
 }
 
 /* 도넛 그래프 */
+.graph-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
 .circular-chart {
-  display: block;
-  margin: 10px auto;
-  max-width: 150px;
-  max-height: 150px;
+  transform: rotate(-90deg);
 }
 
 .circle-bg {
   fill: none;
-  stroke: #f3f4f6;
-  stroke-width: 3.8;
+  stroke: #e5e7eb;
+  stroke-width: 2.8;
 }
 
 .circle {
   fill: none;
-  stroke-width: 3.8;
+  stroke-width: 2.8;
   stroke-linecap: round;
-  stroke: #ec4899; /* 분홍색 */
-  animation: progress 1.2s ease-out forwards;
+  stroke: #0284c7;
+  transition: stroke-dasharray 0.3s ease;
 }
 
-@keyframes progress {
-  0% {
-    stroke-dasharray: 0 100;
-  }
-}
-
-/* 가운데 텍스트 */
 .percentage {
-  fill: #3730a3; /* 남색 */
-  font-size: 0.5em;
-  text-anchor: middle;
+  fill: #1f2937;
+  font-size: 0.6em;
   font-weight: 700;
+  text-anchor: middle;
+  transform: rotate(90deg);
 }
 
 .graph-info {
-  text-align: center;
-  color: #374151;
+  margin-top: 10px;
 }
 
 .graph-info .sub {
-  font-size: 14px;
   color: #6b7280;
-  margin-top: 4px;
+  font-size: 13px;
+}
+
+.total-info {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 6px;
 }

@@ -17,7 +17,7 @@ const App: React.FC = () => {
           <Route path="/graph" element={<Graph />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/add/:date" element={<AddMedicinePage />} />
-          <Route path="/add/:id" element={<AddMedicinePage />} />
+          <Route path="/edit/:id" element={<AddMedicinePage />} />
         </Routes>
         <BottomNav />
       </div>

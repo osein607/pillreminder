@@ -12,11 +12,13 @@ interface MedicineStore {
 
   toggleTaken: (date: string, id: number) => void;
 
-  updateMedicine: ( 
+  updateMedicine: (
     date: string,
     id: number,
     updates: Partial<Medicine>
   ) => void;
+
+  deleteMedicine: (id: number) => void;
 
   reset: () => void;
 }
@@ -27,12 +29,13 @@ export const useMedicineStore = create<MedicineStore>()(
       medicines: {},
 
       // ✅ 약 정보 수정
-      updateMedicine: (date, id, updates) =>
+      updateMedicine: (date, id, newData) =>
         set((state) => {
-          const updated = (state.medicines[date] || []).map((m) =>
-            m.id === id ? { ...m, ...updates } : m
+          const updated = { ...state.medicines };
+          updated[date] = updated[date].map((m) =>
+            m.id === id ? { ...m, ...newData } : m
           );
-          return { medicines: { ...state.medicines, [date]: updated } };
+          return { medicines: updated };
         }),
 
       // ✅ 약 추가
@@ -55,21 +58,25 @@ export const useMedicineStore = create<MedicineStore>()(
           };
         }),
 
-      // ✅ 복용 완료 토글
-      toggleTaken: (date, id) =>
+      deleteMedicine: (id: number) =>
         set((state) => {
-          const updated = (state.medicines[date] || []).map((m) =>
-            m.id === id ? { ...m, taken: !m.taken } : m
-          );
-          return {
-            medicines: {
-              ...state.medicines,
-              [date]: updated,
-            },
-          };
+          const updated = { ...state.medicines };
+          Object.keys(updated).forEach((date) => {
+            updated[date] = updated[date].filter((m) => m.id !== id);
+          });
+          return { medicines: updated };
         }),
 
-        reset: () => set(() => ({ medicines: {} })),
+      toggleTaken: (date, id) =>
+        set((state) => {
+          const updated = { ...state.medicines };
+          updated[date] = updated[date].map((m) =>
+            m.id === id ? { ...m, taken: !m.taken } : m
+          );
+          return { medicines: updated };
+        }),
+
+      reset: () => set(() => ({ medicines: {} })),
     }),
     { name: "medicine-storage" }
   )

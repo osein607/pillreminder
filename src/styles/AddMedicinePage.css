@@ -7,6 +7,7 @@
   height: 100%;
   padding: 24px 20px 100px;
   background: linear-gradient(to bottom, #f0f9ff, #ffffff);
+  overflow-y: auto;
 }
 
 /* ===============================
@@ -141,7 +142,7 @@
 }
 
 /* ===============================
-   📌 등록 버튼
+   📌 등록 버튼, 삭제 버튼
 ================================*/
 .submit-btn {
   background-color: #3B82F6;
@@ -160,6 +161,24 @@
   background-color: #0369a1;
 }
 
+.delete-btn {
+  margin-top: 16px;
+  width: 100%;
+  background: #fee2e2;
+  color: #b91c1c;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-btn:hover {
+  background: #fecaca;
+}
+
+
 /* ===============================
    📌 스크롤바(모바일 대비)
 ================================*/
@@ -170,3 +189,4 @@
   background: #cbd5e1;
   border-radius: 10px;
 }
+

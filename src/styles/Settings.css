@@ -6,11 +6,6 @@
   font-family: "Pretendard", sans-serif;
 }
 
-.settings-page::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-
 .settings-header {
   margin-bottom: 20px;
   text-align: center;

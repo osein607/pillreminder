@@ -1,3 +1,6 @@
+/* =============================
+   기본 컨테이너
+============================= */
 .graph-container {
   padding: 24px;
   background: #f9fcff;
@@ -6,14 +9,48 @@
   text-align: center;
 }
 
+/* =============================
+   캘린더 헤더 (신규 추가/수정)
+============================= */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 400px; /* 달력 너비와 맞추기 */
+  margin: 0 auto 10px auto;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
 .graph-title {
   font-size: 20px;
   font-weight: 700;
   color: #1f2937;
-  margin-bottom: 16px;
+  /* margin-bottom: 16px; <-- 삭제 */
+  flex-grow: 1; /* (수정) 버튼 사이에서 중앙 정렬 */
+  margin: 0; /* (수정) 기본 마진 제거 */
 }
 
-/* 🗓️ 달력 스타일 */
+.nav-button {
+  /* (신규) 월 이동 버튼 */
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #555;
+  cursor: pointer;
+  padding: 0 15px;
+  transition: color 0.2s;
+}
+
+.nav-button:hover {
+  color: #0284c7; /* 테마 색상(stroke)과 통일 */
+}
+
+/* =============================
+   🗓️ 달력 스타일
+============================= */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -34,6 +71,28 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.calendar-cell.day-header {
+  /* (신규) 요일 헤더 스타일 */
+  font-weight: bold;
+  color: #6b7280; /* 회색 텍스트 */
+  font-size: 12px;
+  background: transparent; /* 배경 없음 */
+  border-bottom: 1px solid #e5e7eb; /* 구분선 */
+  border-radius: 0; /* 모서리 둥글게 안함 */
+  height: auto; /* 고정 높이 제거 */
+  padding-bottom: 8px;
+}
+
+.calendar-cell.other-month {
+  /* (신규) 다른 달 날짜 스타일 */
+  background: #f8f9fa; /* 더 연한 배경 */
+  opacity: 0.7;
+}
+
+.calendar-cell.other-month .calendar-symbol {
+  display: none; /* 다른 달 심볼 숨기기 */
 }
 
 .calendar-day {
@@ -59,7 +118,9 @@
   color: #ef4444; /* 빨강: 미복용 */
 }
 
-/* 도넛 그래프 */
+/* =============================
+   📈 도넛 그래프
+============================= */
 .graph-card {
   display: flex;
   flex-direction: column;
@@ -68,6 +129,14 @@
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+.graph-subtitle {
+  /* (신규) 그래프 소제목 */
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 15px;
 }
 
 .circular-chart {

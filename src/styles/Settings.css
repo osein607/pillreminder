@@ -4,7 +4,6 @@
   padding: 20px;
   box-sizing: border-box;
   font-family: "Pretendard", sans-serif;
-  overflow-y: auto;
 }
 
 .settings-page::-webkit-scrollbar {

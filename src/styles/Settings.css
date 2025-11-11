@@ -7,7 +7,7 @@
   overflow-y: auto;
 }
 
-.settings-page::-webkit-scrollbar { /* Chrome/Safari */
+.settings-page::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
@@ -46,15 +46,69 @@
   padding-bottom: 6px;
 }
 
+/* --- 💡 수정된 부분 (조회 카드) --- */
 .info-card {
+  position: relative; /* '정보 수정' 버튼 배치를 위함 */
   background-color: #f9fafb;
   border-radius: 12px;
   padding: 12px;
   font-size: 14px;
   color: #374151;
-  line-height: 1;
+  line-height: 1.6; /* 💡 줄 간격 수정 */
 }
 
+/* --- 💡 신규 추가 (정보 수정 버튼) --- */
+.edit-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #0284c7; /* 파란색 배경 */
+  color: white; /* 하얀색 글씨 */
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.edit-btn:hover {
+  background-color: #0369a1;
+}
+
+/* --- 💡 신규 추가 (사용자 정보 수정 폼) --- */
+.edit-form-card {
+  /* guardian-card와 유사한 스타일 적용 */
+  background: #f9fcff;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.edit-form-card label {
+  font-weight: 600;
+  color: #1e3a8a;
+  font-size: 14px;
+}
+
+.edit-form-card input {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.edit-form-card input:focus {
+  outline: none;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+}
+
+/* (기존 스타일) */
 .toggle-row {
   display: flex;
   justify-content: space-between;
@@ -94,6 +148,7 @@
   transform: translateY(-2px);
 }
 
+/* (기존 스타일) 보호자 정보 수정 폼 */
 .guardian-card {
   background: #f9fcff;
   border: 1px solid #dbeafe;
@@ -142,4 +197,20 @@
 
 .save-btn:hover {
   background: #0369a1;
+}
+
+/* --- 💡 신규 추가 (취소 버튼) --- */
+.cancel-btn {
+  margin-top: 4px;
+  background: #94a3b8; /* 회색 배경 */
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: #64748b;
 }

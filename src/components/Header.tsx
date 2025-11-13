@@ -5,7 +5,7 @@ import "../styles/Header.css";
 const Header: React.FC = () => {
   const navigate = useNavigate();
   // 💡 사용자 이름을 state로 관리
-  const [userName, setUserName] = useState("사용자"); // 기본값
+  const [userName, setUserName] = useState("동국"); // 기본값
 
   // 💡 컴포넌트가 처음 렌더링될 때 localStorage에서 이름 불러오기
   useEffect(() => {

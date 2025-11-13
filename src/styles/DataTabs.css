@@ -1,15 +1,44 @@
+/* 💡 1. '년/월' 제목과 탭을 감싸는 래퍼 */
+.date-tabs-wrapper {
+  /* margin-top: 12px; (date-tabs에서 이동) */
+}
+
+/* 💡 2. '년/월' 제목 스타일 */
+.date-tabs-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  padding: 0 24px; /* 좌우 여백 */
+  margin-top: 16px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+/* 3. 스크롤 컨테이너 */
 .date-tabs {
   display: flex;
   gap: 12px;
-  margin-top: 12px;
+  /* margin-top: 12px; (wrapper로 이동) */
   padding: 0 24px 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.date-tabs::-webkit-scrollbar {
+  display: none;
 }
 
+/* 4. 개별 날짜 탭 */
 .pill {
   width: 56px;
   height: 80px;
   border-radius: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  
+  /* 💡 5. 테두리 두께 2px로 변경 및 box-sizing 추가 */
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-sizing: border-box; /* 👈 테두리가 생겨도 크기가 커지지 않게 함 */
+  align-items: center;
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
   text-align: center;
@@ -19,15 +48,39 @@
   justify-content: center;
   transition: 0.2s ease;
   color: #334155;
+  
+  /* 💡 flex-shrink: 0 추가 (모바일에서 탭이 찌그러지는 현상 방지) */
+  flex-shrink: 0; 
 }
 
+/* 💡 6. '오늘' 탭 (파란 테두리) */
+.pill.today {
+  border-color: #007aff; /* 파란색 */
+}
+
+/* 💡 7. '마우스 올린' 탭 (빨간 테두리) */
+.pill:hover {
+  border-color: #ef4444; /* 빨간색 */
+}
+
+/* 8. '선택된' 탭 (빨간 배경) */
 .pill.active {
   background: linear-gradient(to bottom, #fb7185, #f43f5e);
   color: white;
   transform: scale(1.002);
   outline: none;
+  /* 💡 테두리도 빨간색으로 통일 */
+  border-color: #f43f5e;
 }
 
+/* 💡 (선택됨 + 마우스 올림) 
+   빨간 배경일 땐 hover해도 테두리색 유지 */
+.pill.active:hover {
+  border-color: #f43f5e;
+}
+
+
+/* 9. 탭 내부 텍스트 (기존과 동일) */
 .pill-day {
   font-size: 18px;
 }

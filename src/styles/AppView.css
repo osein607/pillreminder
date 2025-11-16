@@ -5,8 +5,8 @@
   width: 100vw;
   display: flex;
   justify-content: center; /* ✅ 가운데 정렬 */
-  align-items: center;     /* ✅ 세로 가운데 정렬 */
-  overflow: hidden;
+  align-items: flex-start;     /* ✅ 세로 가운데 정렬 */
+  overflow-y: auto;
 }
 
 /* 📱 앱 프레임 */

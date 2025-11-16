@@ -4,10 +4,11 @@
 .add-page {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100vh;  /* 부모 전체 높이를 기준으로 */
   padding: 24px 20px 100px;
   background: linear-gradient(to bottom, #f0f9ff, #ffffff);
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
 /* ===============================

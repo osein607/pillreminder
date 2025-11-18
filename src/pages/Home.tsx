@@ -2,27 +2,29 @@ import React, { useState, useEffect } from "react";
 import MedicineCard from "../components/MedicineCard";
 import Header from "../components/Header";
 import DateTabs from "../components/DateTabs";
+import { fetchMedicines } from "../apis/medicineApi";
 import { useMedicineStore } from "../data/medicineStore";
 import type { Medicine } from "../data/medicine";
 import "../styles/Home.css";
 import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
-  const medicines = useMedicineStore((state) => state.medicines);
-  const toggleTaken = useMedicineStore((state) => state.toggleTaken);
-
   const navigate = useNavigate();
 
+  const medicines = useMedicineStore((state) => state.medicines);
+  const toggleTaken = useMedicineStore((state) => state.toggleTaken);
+  const setMedicines = useMedicineStore((state) => state.setMedicines);
+
+  // 날짜 설정
   const [selectedDate, setSelectedDate] = useState(new Date());
   const formatDate = (date: Date) => {
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, "0");
     const d = String(date.getDate()).padStart(2, "0");
-    return `${y}-${m}-${d}`; // ✅ 현지 날짜 그대로 문자열로 반환
+    return `${y}-${m}-${d}`;
   };
 
   const formattedDate = formatDate(selectedDate);
-
   const todayMeds: Medicine[] = medicines[formattedDate] || [];
 
   const getWeekday = (date: Date) => {
@@ -42,6 +44,38 @@ const Home: React.FC = () => {
     toggleTaken(formattedDate, id);
   };
 
+  // ⭐ API 호출 → store 저장
+  useEffect(() => {
+    async function load() {
+      try {
+        const data = await fetchMedicines();
+
+        const grouped = data.reduce((acc: any, med: any) => {
+          const date = med.start_date;
+          if (!acc[date]) acc[date] = [];
+          acc[date].push({
+            id: med.id,
+            name: med.name,
+            quantity: med.quantity,
+            remaining: med.quantity,
+            taken: med.is_taken_today,
+            date,
+            time: med.time,
+            alarm_time: med.alarm_time,
+            type: med.type,
+          });
+          return acc;
+        }, {});
+
+        setMedicines(grouped);
+      } catch (e) {
+        console.error("약 목록 불러오기 실패:", e);
+      }
+    }
+    load();
+  }, [setMedicines]);
+
+  // WebSocket
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080");
     ws.onmessage = (event) => {
@@ -72,7 +106,7 @@ const Home: React.FC = () => {
           todayMeds.map((med) => (
             <div
               key={med.id}
-              onClick={() => navigate(`/edit/${med.id}`)} // ✅ 클릭 시 수정 페이지로 이동
+              onClick={() => navigate(`/edit/${med.id}`)}
             >
               <MedicineCard medicine={med} onToggleTaken={handleToggleTaken} />
             </div>

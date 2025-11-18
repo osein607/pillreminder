@@ -19,8 +19,9 @@ interface MedicineStore {
   ) => void;
 
   deleteMedicine: (id: number) => void;
-
   reset: () => void;
+  setMedicines: (data: Record<string, Medicine[]>) => void;
+
 }
 
 export const useMedicineStore = create<MedicineStore>()(
@@ -28,7 +29,11 @@ export const useMedicineStore = create<MedicineStore>()(
     (set) => ({
       medicines: {},
 
-      // ✅ 약 정보 수정
+      setMedicines: (data) =>
+        set(() => ({
+          medicines: data,
+        })),
+
       updateMedicine: (date, id, newData) =>
         set((state) => {
           const updated = { ...state.medicines };
@@ -38,7 +43,6 @@ export const useMedicineStore = create<MedicineStore>()(
           return { medicines: updated };
         }),
 
-      // ✅ 약 추가
       addMedicine: (date, newMed) =>
         set((state) => {
           const prev = state.medicines[date] || [];

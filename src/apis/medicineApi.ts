@@ -1,6 +1,25 @@
 import instance from "./utils/instance";
 
-export async function fetchMedicines() {
-  const res = await instance.get("/medicine/");
-  return res.data; // 백엔드에서 오는 약 리스트
-}
+// 1. 약 리스트 조회 (GET /medicine/)
+export const fetchMedicines = async () => {
+  try {
+    const response = await instance.get("/medicine/");
+    console.log("약 리스트 응답:", response.data); // 데이터 확인용 로그
+    return response.data;
+  } catch (error) {
+    console.error("약 리스트 조회 실패:", error);
+    return []; // 💡 에러가 나면 빈 배열을 반환해서 화면이 안 깨지게 함
+  }
+};
+
+// 2. 약 등록 (POST /medicine/)
+export const registerMedicineAPI = async (data: any) => {
+  try {
+    const response = await instance.post("/medicine/", data);
+    console.log("약 등록 응답:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("약 등록 실패:", error);
+    throw error; // 💡 에러를 밖으로 던져서, 화면에서 alert를 띄울 수 있게 함
+  }
+};

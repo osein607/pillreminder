@@ -1,6 +1,6 @@
 import type { DailyDose } from "./medicine";
 import { create } from "zustand";
-import { fetchDailyDose, takeDailyDose } from "../apis/dailydoseApi";
+import { fetchDailyDose, takeDailyDose } from "../apis/dailyDoseApi";
 
 interface DailyDoseState {
   doses: DailyDose[];

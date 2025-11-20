@@ -22,12 +22,16 @@ interface MedicineStore {
   reset: () => void;
   setMedicines: (data: Record<string, Medicine[]>) => void;
 
+  logs: Record<string, { taken: number; missed: number }>;
+  setLogs: (items: { date: string; taken: number; missed: number }[]) => void;
+
 }
 
 export const useMedicineStore = create<MedicineStore>()(
   persist(
     (set) => ({
       medicines: {},
+      logs: {},   // ⭐ 초기값 추가
 
       setMedicines: (data) =>
         set(() => ({
@@ -80,7 +84,24 @@ export const useMedicineStore = create<MedicineStore>()(
           return { medicines: updated };
         }),
 
-      reset: () => set(() => ({ medicines: {} })),
+      // ⭐ /medicine/logs 응답을 상태에 저장
+      setLogs: (items) =>
+        set(() => {
+          const newLogs: MedicineStore["logs"] = {};
+          items.forEach((d) => {
+            newLogs[d.date] = {
+              taken: d.taken,
+              missed: d.missed,
+            };
+          });
+          return { logs: newLogs };
+        }),
+
+      reset: () =>
+        set(() => ({
+          medicines: {},
+          logs: {},   // reset 시 logs도 초기화
+        })),
     }),
     { name: "medicine-storage" }
   )

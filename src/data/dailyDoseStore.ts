@@ -1,6 +1,7 @@
 import type { DailyDose } from "./medicine";
 import { create } from "zustand";
 import { fetchDailyDose, takeDailyDose } from "../apis/dailyDoseApi";
+import { useMedicineStore } from "./medicineStore";
 
 interface DailyDoseState {
   doses: DailyDose[];
@@ -25,5 +26,8 @@ export const useDailyDoseStore = create<DailyDoseState>((set) => ({
         d.id === id ? { ...d, ...updated } : d
       ),
     }));
+
+    const month = updated.date.slice(5, 7);
+    await useMedicineStore.getState().fetchLogs(month);
   },
 }));

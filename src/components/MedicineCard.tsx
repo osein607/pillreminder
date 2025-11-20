@@ -25,7 +25,7 @@ const MedicineCard: React.FC<Props> = ({ medicine, onToggleTaken }) => {
       <button
         onClick={(e) => {
           e.stopPropagation();
-          onToggleTaken(medicine.id);
+          onToggleTaken(medicine.dose_id);
         }}
         className={`take-btn ${medicine.taken ? "taken" : ""}`}
       >

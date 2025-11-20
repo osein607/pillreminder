@@ -5,7 +5,9 @@ import DateTabs from "../components/DateTabs";
 // 👇 파일 경로가 실제 파일 위치와 맞는지 꼭 확인하세요! (apis -> api 등)
 import { fetchMedicines } from "../apis/medicineApi"; 
 import { useMedicineStore } from "../data/medicineStore";
-import type { Medicine } from "../data/medicine";
+import { useDailyDoseStore } from "../data/dailyDoseStore";
+
+import type { Medicine, MedicineCardData } from "../data/medicine";
 import "../styles/Home.css";
 import { useNavigate } from "react-router-dom";
 
@@ -22,8 +24,7 @@ const weekdaysShort = ["일", "월", "화", "수", "목", "금", "토"];
 const Home: React.FC = () => {
   const navigate = useNavigate();
 
-  const medicines = useMedicineStore((state) => state.medicines);
-  const toggleTaken = useMedicineStore((state) => state.toggleTaken);
+  const { doses, setDate, markTaken } = useDailyDoseStore();
   const setMedicines = useMedicineStore((state) => state.setMedicines);
 
   // 날짜 설정
@@ -32,15 +33,36 @@ const Home: React.FC = () => {
   // 현재 선택된 날짜 문자열
   const formattedDate = formatDate(selectedDate);
   // 해당 날짜의 약 목록 가져오기
-  const todayMeds: Medicine[] = medicines[formattedDate] || [];
+  const convertType = (t: string) => {
+    switch (t) {
+      case "PRESCRIPTION":
+        return "처방약";
+      case "SUPPLEMENT":
+        return "건강보조제";
+      case "GENERAL":
+      default:
+        return "일반약";
+    }
+  };
+
+  const todayMeds: MedicineCardData[] = doses.map((d) => ({
+    dose_id: d.id,                 // DailyDose.id
+    id: d.medicine.id,             // Medicine.id
+    name: d.medicine.name,
+    quantity: d.quantity,
+    time: d.medicine.time,
+    type: convertType(d.medicine.type),         // ⭐ 필수: '처방약' | '일반약' | '건강보조제'
+    taken: d.is_taken,
+  }));
 
   const getWeekday = (date: Date) => {
     return weekdaysShort[date.getDay()];
   };
 
-  const handleToggleTaken = (id: number) => {
-    toggleTaken(formattedDate, id);
+  const handleToggleTaken = (doseId: number) => {
+    markTaken(doseId);
   };
+
 
   // ⭐ [수정됨] API 호출 및 데이터 가공 로직
   useEffect(() => {
@@ -125,6 +147,10 @@ const Home: React.FC = () => {
     return () => ws.close();
   }, []);
 
+  useEffect(() => {
+    setDate(formattedDate);  // ⭐ DailyDose 불러오기
+  }, [formattedDate]);
+
   return (
     <div className="home-container">
       <Header />
@@ -143,7 +169,7 @@ const Home: React.FC = () => {
         ) : (
           todayMeds.map((med) => (
             <div
-              key={med.id}
+              key={med.dose_id}
               onClick={() => navigate(`/edit/${med.id}`)}
             >
               <MedicineCard medicine={med} onToggleTaken={handleToggleTaken} />

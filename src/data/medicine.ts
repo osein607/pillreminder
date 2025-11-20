@@ -41,7 +41,8 @@ export const mapTimeCodeToLabel = (time: "BEFORE_MEAL" | "AFTER_MEAL") => {
 
 
 export interface MedicineCardData {
-  id: number;
+  dose_id: number;      // DailyDose.id ⭐
+  id: number;           // Medicine.id  
   name: string;
   quantity: number;
   time: string;

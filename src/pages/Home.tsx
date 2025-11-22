@@ -135,17 +135,6 @@ const Home: React.FC = () => {
     load();
   }, [setMedicines]); 
 
-  // WebSocket
-  useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080");
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.medicineId && data.taken) {
-        handleToggleTaken(data.medicineId);
-      }
-    };
-    return () => ws.close();
-  }, []);
 
   useEffect(() => {
     setDate(formattedDate);  // ⭐ DailyDose 불러오기

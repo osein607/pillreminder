@@ -12,14 +12,21 @@ const App: React.FC = () => {
   return (
     <div className="app-wrapper">
       <div className="app-view">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/graph" element={<Graph />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/add/:date" element={<AddMedicinePage />} />
-          <Route path="/edit/:id" element={<AddMedicinePage />} />
-        </Routes>
+        
+        {/* ✅ 1. 스크롤이 필요한 콘텐츠 영역을 main 태그로 감쌉니다. */}
+        <main className="content-area">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/graph" element={<Graph />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/add/:date" element={<AddMedicinePage />} />
+            <Route path="/edit/:id" element={<AddMedicinePage />} />
+          </Routes>
+        </main>
+
+        {/* ✅ 2. BottomNav는 main 태그 바깥에 둡니다. */}
         <BottomNav />
+        
       </div>
     </div>
   );

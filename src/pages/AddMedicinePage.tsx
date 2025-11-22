@@ -1,9 +1,21 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMedicineStore } from "../data/medicineStore";
-import { registerMedicineAPI } from "../apis/medicineApi"; // 👈 API 임포트 (경로 확인!)
 import type { Medicine } from "../data/medicine";
 import "../styles/AddMedicinePage.css";
+
+import { 
+  mapTypeCodeToLabel,
+  mapTimeCodeToLabel,
+  type MedicineTypeCode,
+} from "../data/medicine";
+
+import { 
+  registerMedicineAPI,
+  fetchMedicineDetailAPI,
+  updateMedicineAPI,
+  deleteMedicineAPI
+} from "../apis/medicineApi";
 
 const TYPE_OPTIONS = ["처방약", "일반약", "건강보조제"] as const;
 const TIME_OPTIONS = ["식전 복용", "식후 30분"] as const;
@@ -13,7 +25,7 @@ export default function AddMedicinePage() {
   const navigate = useNavigate();
 
   // ✅ addMedicine은 이제 안 쓰므로 제거 (누런 줄 원인 제거)
-  const { medicines, deleteMedicine } = useMedicineStore(); 
+  // const { medicines, deleteMedicine } = useMedicineStore(); 
   
   // --- [기존 로직 유지] 수정 모드일 때 데이터 불러오기 ---
   const [hydrated, setHydrated] = useState(false);
@@ -26,13 +38,55 @@ export default function AddMedicinePage() {
   const isEditMode = !!id;
   const [existing, setExisting] = useState<Medicine | null>(null);
 
+  // --- 약 상세 조회: 백엔드에서 가져오기 ---
   useEffect(() => {
-    if (hydrated) {
-      const allMeds = Object.values(medicines).flat();
-      const found = allMeds.find((m) => m.id === Number(id));
-      if (found) setExisting(found);
+    if (!id) return;
+
+    async function loadDetail() {
+      try {
+        const data = await fetchMedicineDetailAPI(Number(id));
+
+        // 백엔드 코드 → 한글 라벨로 변환
+        const typeLabel = mapTypeCodeToLabel(data.type as MedicineTypeCode);
+        const timeLabel = mapTimeCodeToLabel(data.time as "BEFORE_MEAL" | "AFTER_MEAL");
+        const notif = data.alarm_time ? data.alarm_time.slice(0, 5) : "10:00";
+
+        // 🔹 Medicine 타입에 맞게 필드 모두 채우기
+        const existingMed: Medicine = {
+          id: data.id,
+          name: data.name,
+          dosage: "",              // 백엔드에 없으면 일단 빈 문자열
+          type: typeLabel,         // '처방약' 등
+          time: timeLabel,         // '식전 복용' 등
+          remaining: data.quantity, // 또는 0 등 원하는 값
+          taken: false,
+          date: data.start_date,   // 필요에 따라 today로 바꾸고 싶으면 변경
+          quantity: data.quantity,
+          startDate: data.start_date,
+          endDate: data.end_date,
+          notification: notif,     // "10:00" 형태
+        };
+
+        setExisting(existingMed);
+
+        // 🧩 폼에 바인딩된 state들도 같이 채워주기
+        setType(existingMed.type);
+        setInstruction(existingMed.time);
+        setName(existingMed.name);
+        setQuantity(existingMed.quantity);
+        setStartDate(existingMed.startDate);
+        setEndDate(existingMed.endDate);
+        setNotification(existingMed.notification);
+
+      } catch (err) {
+        console.error("상세 조회 실패:", err);
+        alert("약 정보를 불러오지 못했습니다.");
+        navigate("/");
+      }
     }
-  }, [hydrated, medicines, id]);
+
+    loadDetail();
+  }, [id, navigate]);
   // ----------------------------------------------------
 
   const formatLocalDate = (date: Date) => {
@@ -64,14 +118,20 @@ export default function AddMedicinePage() {
     }
   }, [existing]);
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!existing) return;
-    if (window.confirm(`"${existing.name}" 약 정보를 삭제할까요?`)) {
-      deleteMedicine(existing.id); // 나중에 이것도 API로 바꿔야 함
-      alert("약 정보가 삭제되었습니다.");
+    if (!window.confirm("삭제할까요?")) return;
+
+    try {
+      await deleteMedicineAPI(existing.id);
+      alert("삭제 완료!");
       navigate("/");
+    } catch (err) {
+      console.error(err);
+      alert("삭제 실패!");
     }
   };
+
 
   // 🚀 [핵심 수정] API를 사용하여 약 등록하기
 const handleSubmit = async () => {
@@ -114,13 +174,21 @@ const handleSubmit = async () => {
     console.log("🚀 서버로 보내는 최종 데이터:", apiData);
 
     try {
-      await registerMedicineAPI(apiData);
-      alert("등록 성공!");
+      if (isEditMode) {
+        await updateMedicineAPI(Number(id), apiData);
+        alert("수정 완료!");
+      } else {
+        await registerMedicineAPI(apiData);
+        alert("등록 성공!");
+      }
+
       navigate("/", { replace: true });
+
     } catch (error) {
       console.error(error);
-      alert("등록 실패! (여전히 안 되면 alarm_time 형식을 팀원에게 문의하세요)");
+      alert("실패했습니다. 다시 시도해주세요!");
     }
+
   };
   if (!hydrated) {
     return <div className="add-page"><h3>⏳ 로딩 중...</h3></div>;

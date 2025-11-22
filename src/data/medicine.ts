@@ -35,7 +35,7 @@ export const mapTimeCodeToLabel = (time: "BEFORE_MEAL" | "AFTER_MEAL") => {
     case "AFTER_MEAL":
       return "식후 30분";
     default:
-      return "";
+      return "식전 복용";
   }
 };
 

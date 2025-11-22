@@ -23,3 +23,21 @@ export const registerMedicineAPI = async (data: any) => {
     throw error; // 💡 에러를 밖으로 던져서, 화면에서 alert를 띄울 수 있게 함
   }
 };
+
+// 약 상세 조회
+export const fetchMedicineDetailAPI = async (id: number) => {
+  const res = await instance.get(`/medicine/${id}/`);
+  return res.data;
+};
+
+// 약 수정
+export const updateMedicineAPI = async (id: number, body: any) => {
+  const res = await instance.put(`/medicine/${id}/`, body);
+  return res.data;
+};
+
+// 약 삭제
+export const deleteMedicineAPI = async (id: number) => {
+  const res = await instance.delete(`/medicine/${id}/`);
+  return res.data;
+};

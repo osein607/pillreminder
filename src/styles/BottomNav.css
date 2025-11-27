@@ -1,5 +1,5 @@
 .bottom-nav {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -11,7 +11,7 @@
   backdrop-filter: blur(10px);
   border-top: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
-  z-index: 10;
+  z-index: 1000;
 }
 
 .nav-item {

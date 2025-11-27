@@ -41,3 +41,27 @@ export const deleteMedicineAPI = async (id: number) => {
   const res = await instance.delete(`/medicine/${id}/`);
   return res.data;
 };
+
+// 6. 보호자 정보 조회 (GET /medicine/guardian/)
+export const fetchGuardianAPI = async () => {
+  try {
+    const response = await instance.get("/medicine/guardian/");
+    console.log("보호자 조회 응답:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("보호자 조회 실패:", error);
+    throw error;
+  }
+};
+
+// 7. 보호자 정보 수정 (POST /medicine/guardian/update)
+export const updateGuardianAPI = async (data: any) => {
+  try {
+    const response = await instance.post("/medicine/guardian/update/", data);
+    console.log("보호자 수정 응답:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("보호자 수정 실패:", error);
+    throw error;
+  }
+};

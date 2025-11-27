@@ -44,13 +44,22 @@ const Home: React.FC = () => {
         return "일반약";
     }
   };
-
+  const convertTime = (t: string) => {
+  switch (t) {
+    case "BEFORE_MEAL":
+      return "식전 복용";
+    case "AFTER_MEAL":
+      return "식후 복용";
+    default:
+      return "식후 복용";
+    }
+  };
   const todayMeds: MedicineCardData[] = doses.map((d) => ({
     dose_id: d.id,                 // DailyDose.id
     id: d.medicine.id,             // Medicine.id
     name: d.medicine.name,
     quantity: d.quantity,
-    time: d.medicine.time,
+      time: convertTime(d.medicine.time),
     type: convertType(d.medicine.type),         // ⭐ 필수: '처방약' | '일반약' | '건강보조제'
     taken: d.is_taken,
   }));

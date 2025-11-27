@@ -1,64 +1,99 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Settings.css";
-// import { useMedicineStore } from "../data/medicineStore";
-// import { useNavigate } from "react-router-dom";
+
+// 💡 방금 만드신 API 파일 경로에 맞게 import 경로를 수정해주세요!
+// 예: import { fetchGuardianAPI, updateGuardianAPI } from "../api/medicine";
+import { fetchGuardianAPI, updateGuardianAPI } from "../apis/medicineApi"; 
 
 const Settings: React.FC = () => {
-  // const navigate = useNavigate();
-  // const resetStore = useMedicineStore((state) => state.reset);
-
-  // --- 수정 모드 관리 ---
+  // --- 상태 관리 ---
   const [isEditingUser, setIsEditingUser] = useState(false);
   const [isEditingGuardian, setIsEditingGuardian] = useState(false);
 
-  // --- 사용자 정보 ---
-  const [userName, setUserName] = useState("동국"); // " 님" 제거
-  const [userEmail, setUserEmail] = useState("dgu@medicare.com");
+  // 사용자 정보
+  const [userName, setUserName] = useState(""); 
+  const [userEmail, setUserEmail] = useState("");
 
-  // --- 보호자 정보 ---
+  // 보호자 정보
   const [guardianName, setGuardianName] = useState("");
   const [guardianPhone, setGuardianPhone] = useState("");
   const [guardianEmail, setGuardianEmail] = useState("");
 
-  // 💡 컴포넌트 로드 시 localStorage에서 정보 불러오기
-  useEffect(() => {
-    // 1. 사용자 정보 로드
-    const savedUser = localStorage.getItem("user-info");
-    if (savedUser) {
-      const { name, email } = JSON.parse(savedUser);
-      setUserName(name || "동국");
-      setUserEmail(email || "dgu@medicare.com");
-    }
+  // =========================================================
+  // 📡 1. 데이터 조회 (API 함수 사용)
+  // =========================================================
+  const loadData = async () => {
+    try {
+      // API 호출 (instance가 토큰, URL 등을 알아서 처리함)
+      const data = await fetchGuardianAPI();
 
-    // 2. 보호자 정보 로드
-    const savedGuardian = localStorage.getItem("guardian-info");
-    if (savedGuardian) {
-      const { guardianName, guardianPhone, guardianEmail } =
-        JSON.parse(savedGuardian);
-      setGuardianName(guardianName || "");
-      setGuardianPhone(guardianPhone || "");
-      setGuardianEmail(guardianEmail || "");
-    }
-  }, []); // [] 빈 배열: 처음 마운트될 때 한 번만 실행
+      // 보호자 정보 업데이트
+      setGuardianName(data.name || "");
+      setGuardianPhone(data.phone || "");
+      setGuardianEmail(data.email || "");
 
-  // 💾 사용자 정보 저장 핸들러
-  const handleSaveUser = () => {
-    const info = { name: userName, email: userEmail };
-    localStorage.setItem("user-info", JSON.stringify(info));
-    alert("사용자 정보가 저장되었습니다!");
-    setIsEditingUser(false); // 💡 저장 후 조회 모드로 변경
+      // 사용자 정보 업데이트 ("동국 님" -> "동국" 처리)
+      if (data.owner_name) {
+        setUserName(data.owner_name.replace(" 님", ""));
+      }
+      if (data.owner_email) {
+        setUserEmail(data.owner_email);
+      }
+    } catch (error) {
+      // API 파일에서 에러 로그를 찍으므로 여기서는 사용자 알림 정도만
+      console.log("데이터를 불러오지 못했습니다.");
+    }
   };
 
-  // 💾 보호자 정보 저장 핸들러
-  const handleSaveGuardian = () => {
+  // 화면이 처음 켜질 때 실행
+  useEffect(() => {
+    loadData();
+  }, []);
+
+
+  // =========================================================
+  // 💾 2. 데이터 저장 (API 함수 사용)
+  // =========================================================
+  const handleSaveGuardian = async () => {
+    // 유효성 검사
     if (!guardianName || !guardianPhone) {
       alert("보호자 이름과 연락처를 모두 입력해주세요.");
       return;
     }
-    const info = { guardianName, guardianPhone, guardianEmail };
-    localStorage.setItem("guardian-info", JSON.stringify(info));
-    alert("보호자 정보가 저장되었습니다!");
-    setIsEditingGuardian(false); // 💡 저장 후 조회 모드로 변경
+
+    // 서버로 보낼 데이터 구성
+    const requestBody = {
+      owner_name: `${userName} 님`, // 서버 형식에 맞춤
+      owner_email: userEmail,
+      name: guardianName,
+      phone: guardianPhone,
+      email: guardianEmail,
+    };
+
+    try {
+      // API 호출
+      const data = await updateGuardianAPI(requestBody);
+
+      // 성공 시 데이터 최신화
+      setGuardianName(data.name);
+      setGuardianPhone(data.phone);
+      setGuardianEmail(data.email);
+      
+      if (data.owner_name) setUserName(data.owner_name.replace(" 님", ""));
+      if (data.owner_email) setUserEmail(data.owner_email);
+
+      alert("보호자 정보가 저장되었습니다!");
+      setIsEditingGuardian(false); // 조회 모드로 변경
+    } catch (error) {
+      // 에러 발생 시
+      alert("저장에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  // 사용자 정보만 로컬 저장 (보호자 저장 시 같이 전송되므로 UI 처리만 함)
+  const handleSaveUserLocal = () => {
+     alert("사용자 정보는 [보호자 정보 저장] 버튼을 누를 때 함께 서버로 전송됩니다.");
+     setIsEditingUser(false);
   };
 
   return (
@@ -70,11 +105,10 @@ const Settings: React.FC = () => {
         </p>
       </header>
 
-      {/* 👤 계정 정보 */}
+      {/* 👤 계정 정보 섹션 */}
       <section className="settings-section">
         <h3 className="section-title">계정 정보</h3>
         {isEditingUser ? (
-          // 1. 사용자: 수정 모드
           <div className="edit-form-card">
             <label>이름</label>
             <input
@@ -88,12 +122,11 @@ const Settings: React.FC = () => {
               value={userEmail}
               onChange={(e) => setUserEmail(e.target.value)}
             />
-            <button className="save-btn" onClick={handleSaveUser}>
-              💾 사용자 정보 저장
+            <button className="save-btn" onClick={handleSaveUserLocal}>
+              ✅ 입력 완료
             </button>
           </div>
         ) : (
-          // 2. 사용자: 조회 모드
           <div className="info-card">
             <button
               className="edit-btn"
@@ -111,11 +144,10 @@ const Settings: React.FC = () => {
         )}
       </section>
 
-      {/* 👨‍👩‍👧‍👦 보호자 연동 */}
+      {/* 👨‍👩‍👧‍👦 보호자 연동 섹션 */}
       <section className="settings-section">
         <h3 className="section-title">보호자 연동</h3>
         {isEditingGuardian ? (
-          // 1. 보호자: 수정 모드 (기존 UI 재활용)
           <div className="guardian-card">
             <label>보호자 이름</label>
             <input
@@ -133,7 +165,7 @@ const Settings: React.FC = () => {
               placeholder="010-0000-0000"
             />
 
-            <label>보호자 이메일 (선택)</label>
+            <label>보호자 이메일</label>
             <input
               type="email"
               value={guardianEmail}
@@ -150,13 +182,15 @@ const Settings: React.FC = () => {
             </button>
             <button
               className="cancel-btn"
-              onClick={() => setIsEditingGuardian(false)}
+              onClick={() => {
+                setIsEditingGuardian(false);
+                loadData(); // 취소 시 서버 데이터로 원복
+              }}
             >
               취소
             </button>
           </div>
         ) : (
-          // 2. 보호자: 조회 모드
           <div className="info-card">
             <button
               className="edit-btn"
@@ -176,8 +210,6 @@ const Settings: React.FC = () => {
           </div>
         )}
       </section>
-      
-      {/* 데이터 관리 (주석 처리됨) */}
     </div>
   );
 };

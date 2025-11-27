@@ -18,7 +18,7 @@ import {
 } from "../apis/medicineApi";
 
 const TYPE_OPTIONS = ["처방약", "일반약", "건강보조제"] as const;
-const TIME_OPTIONS = ["식전 복용", "식후 30분"] as const;
+const TIME_OPTIONS = ["식전 복용", "식후 복용"] as const;
 
 export default function AddMedicinePage() {
   const { id } = useParams<{ id?: string }>();
@@ -150,7 +150,7 @@ const handleSubmit = async () => {
 
     let timeKey = "BEFORE_MEAL"; // 기본값
     if (instruction === "식전 복용") timeKey = "BEFORE_MEAL";
-    else if (instruction === "식후 30분") timeKey = "AFTER_MEAL";
+    else if (instruction === "식후 복용") timeKey = "AFTER_MEAL";
     // 필요하다면 다른 시간 옵션도 여기에 추가 (예: 식후 30분 -> AFTER_MEAL 등 팀원에게 확인)
 
     // 3. [변환] 시간 포맷 (10:00 -> 10:00:00)

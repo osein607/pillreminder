@@ -30,7 +30,7 @@ const Header: React.FC = () => {
       <div>
         {/* 💡 state 변수를 사용하도록 수정 */}
         <h1>{userName}님, 오늘의 약이에요!</h1>
-        <p>Reminder</p>
+        <p>Pillmate</p>
       </div>
       <button className="add-btn" onClick={handleAddClick}>
         ➕
